@@ -4,7 +4,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server"
+    "dev": "nodemon  --experimental-modules --es-module-specifier-resolution=node  server"
   },
   "license": "MIT",
   "dependencies": {
