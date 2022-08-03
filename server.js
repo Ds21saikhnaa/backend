@@ -1,6 +1,8 @@
 import express from 'express';
 import  dotenv from "dotenv";
+import fileUpload from 'express-fileupload';
 import {connectDB} from "./config/db.js";
+import path from 'path';
 import usersRouter from './routes/user';
 import postsRouter from './routes/post'; 
 import commentRouter from './routes/comment'; 
@@ -13,6 +15,8 @@ dotenv.config({path: './config/config.env'});
 connectDB();
 
 app.use(express.json());
+app.use(fileUpload());
+app.use(express.static('./public/uploads'));
 app.use("/api/v1/users/",usersRouter);
 app.use("/api/v1/post/", postsRouter);
 app.use("/api/v1/comment/", commentRouter);
