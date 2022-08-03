@@ -26,12 +26,22 @@ const UserSchema = new Schema({
         type: String,
         default: "no-photo.jpg",
     },
-    createdAt: {
-        type: Date, 
-        default: Date.now
-    },
     location: String,
-});
+    bio: String,
+    followers:{
+        type: Number,
+        default: 0
+    },
+    following:{
+        type: Number,
+        default: 0
+    },
+    posts:{
+        type: Number,
+        default: 0
+    },
+},{timestamps: true}
+);
 
 UserSchema.pre("save", async function(next) {
     // if(!this.isModified("password")) next();
@@ -51,4 +61,4 @@ UserSchema.methods.checkPassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword, this.password);
 }
 
-export const User = mongoose.model("users", UserSchema);
+export const User = mongoose.model("User", UserSchema);

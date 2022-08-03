@@ -3,6 +3,7 @@ import  dotenv from "dotenv";
 import {connectDB} from "./config/db.js";
 import usersRouter from './routes/user';
 import postsRouter from './routes/post'; 
+import commentRouter from './routes/comment'; 
 import colors from "colors";
 import { errorHandler } from './middleware/errorHandler.js';
 
@@ -14,6 +15,7 @@ connectDB();
 app.use(express.json());
 app.use("/api/v1/users/",usersRouter);
 app.use("/api/v1/post/", postsRouter);
+app.use("/api/v1/comment/", commentRouter);
 app.use(errorHandler);
 
 
