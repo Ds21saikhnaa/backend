@@ -29,6 +29,22 @@ export const deletePost = asyncHandler(async(req, res, next) => {
         success: true
     });
 });
+
+//update post
+export const updatePost = asyncHandler(async(req,res,next) => {
+    const post = await Post.findById(req.params.id);
+    if(!post){
+        throw new MyError("iim post bhgui bn!", 404);
+    }
+    for(let attr in req.body){
+        post[attr] = req.body[attr];
+    }
+    await post.save();
+    res.status(200).json({
+        success: true,
+        data: post
+    })
+})
 //upload image
 export const uploadPhoto = asyncHandler(async( req, res, next) => {
     console.log(req.params.id)
