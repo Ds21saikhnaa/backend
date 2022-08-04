@@ -15,8 +15,9 @@ const commentSchema = new Schema(
     },{ timestamps: true })
 const PostSchema = new Schema({
     image: {
-        type: String,
+        type: [String],
     },
+    photoUrl: [String],
     description: {
         type: String
     },
