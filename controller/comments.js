@@ -45,16 +45,16 @@ export const updateComment = asyncHandler(async(req, res, next) => {
     });
 });
 
-//update comment
+//delete comment
 export const deleteComment = asyncHandler(async(req, res, next) => {
-    // const post = await Post.findById(req.params.id);
-    // if(!post){
-    //     throw new MyError("iim post bhgui bn!", 404);
-    // }
-    const result = await Post.comments.id(req.params.id).remove();
-    await result.save()
+    const post = await Post.findById(req.params.id);
+    if(!post){
+        throw new MyError("iim post bhgui bn!", 404);
+    }
+    post.comments.remove(req.body.commentId);
+    await post.save();
     res.status(200).json({
         success: true,
-        result
+        post
     });
 });
