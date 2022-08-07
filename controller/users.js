@@ -44,3 +44,14 @@ export const getBla = asyncHandler(async(req, res, next) => {
         user: user,
     });
 });
+
+export const deleteUser = asyncHandler(async(req,res, next) => {
+    const user =  await User.findById(req.params.id);
+    if(!user){
+        throw new MyError("iim hereglegch oldsongui!", 401);
+    }
+    user.remove();
+    res.status(200).json({
+        success: true
+    })
+})

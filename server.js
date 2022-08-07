@@ -6,6 +6,7 @@ import path from 'path';
 import usersRouter from './routes/user';
 import postsRouter from './routes/post'; 
 import commentRouter from './routes/comment'; 
+import followRouter from './routes/follow.js';
 import colors from "colors";
 import { errorHandler } from './middleware/errorHandler.js';
 
@@ -20,6 +21,7 @@ app.use(express.static('./public/uploads'));
 app.use("/api/v1/users/",usersRouter);
 app.use("/api/v1/post/", postsRouter);
 app.use("/api/v1/comment/", commentRouter);
+app.use("/api/v1/follow", followRouter);
 app.use(errorHandler);
 
 

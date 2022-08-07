@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import { MyError } from "../utils/myError.js";
-import { Comment, Post } from "../models/Post.js";
+import { Post } from "../models/Post.js";
 
 //getComment
 export const getComments = asyncHandler(async(req, res, next) => {
@@ -38,18 +38,6 @@ export const updateComment = asyncHandler(async(req, res, next) => {
          function(err, doc) {
         (err ? res.status(400).send(err) : res.status(200).json(doc));
         });
-        
-    // const post = await Post.findById(req.params.id);
-    // if(!post){
-    //     throw new MyError("iim post bhgui bn!", 404);
-    // }
-    // const result = post.comments.find(req.body.commentId)
-    // const result = await post.comments.push(req.body);
-    // await post.save()
-    // res.status(200).json({
-    //     success: true,
-    //     result
-    // });
 });
 
 //delete comment
