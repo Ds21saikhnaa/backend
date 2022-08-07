@@ -33,16 +33,23 @@ export const newComment = asyncHandler(async( req, res, next) => {
 
 //update comment
 export const updateComment = asyncHandler(async(req, res, next) => {
-    const post = await Post.findById(req.params.id);
-    if(!post){
-        throw new MyError("iim post bhgui bn!", 404);
-    }
-    const result = await post.comments.push(req.body);
-    await post.save()
-    res.status(200).json({
-        success: true,
-        result
-    });
+    Post.findOneAndUpdate({ _id: req.params.id, "comments._id": req.body.commentId },
+         { $set: { 'comments.$.comment': req.body.comment } }, { new: true }, 
+         function(err, doc) {
+        (err ? res.status(400).send(err) : res.status(200).json(doc));
+        });
+        
+    // const post = await Post.findById(req.params.id);
+    // if(!post){
+    //     throw new MyError("iim post bhgui bn!", 404);
+    // }
+    // const result = post.comments.find(req.body.commentId)
+    // const result = await post.comments.push(req.body);
+    // await post.save()
+    // res.status(200).json({
+    //     success: true,
+    //     result
+    // });
 });
 
 //delete comment
