@@ -21,7 +21,7 @@ app.use(express.static('./public/uploads'));
 app.use("/api/v1/users/",usersRouter);
 app.use("/api/v1/post/", postsRouter);
 app.use("/api/v1/comment/", commentRouter);
-app.use("/api/v1/follow", followRouter);
+app.use("/api/v1/follow/", followRouter);
 app.use(errorHandler);
 
 

@@ -36,12 +36,12 @@ export const userLogin = asyncHandler(async(req, res, next) => {
     });
 });
 
-export const getBla = asyncHandler(async(req, res, next) => {
+export const getUsers = asyncHandler(async(req, res, next) => {
     const user = await User.find();
     // const token = user.getJsonWebToken();
     res.status(200).json({
         success: true,
-        user: user,
+        user: user
     });
 });
 

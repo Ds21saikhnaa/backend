@@ -18,11 +18,12 @@ export const getComments = asyncHandler(async(req, res, next) => {
 
 //newComment 
 export const newComment = asyncHandler(async( req, res, next) => {
+    const userId = req.userId;
     const post = await Post.findById(req.params.id);
     if(!post){
         throw new MyError("iim post bhgui bn!", 404);
     }
-    const result = await post.comments.push(req.body);
+    const result = await post.comments.push({...req.body,userId });
     await post.save()
     res.status(200).json({
         success: true,

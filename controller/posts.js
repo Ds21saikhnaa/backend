@@ -1,5 +1,7 @@
 import asyncHandler from "express-async-handler"
 import { Post } from "../models/Post";
+import { Follow } from "../models/Follow";
+import { TimeLine } from "../models/TimeLine";
 import { MyError } from "../utils/myError.js";
 import path from "path";
 //getPost 
@@ -12,12 +14,38 @@ export const getPosts = asyncHandler(async( req, res, next) => {
 });
 //new post
 export const newPost = asyncHandler(async( req, res, next) => {
-    const post = await Post.create(req.body);
+    const userId = req.userId;
+    const post = await Post.create({...req.body, createUser:userId});
+    const followers = await Follow.find({
+        follower: userId,
+      }).lean();
+      console.log(followers);
+      followers.forEach(async (user) => {
+        console.log(user);
+        TimeLine.create({
+          follower: user._id,
+          following: userId,
+          post: post._id,
+        });
+      });
     res.status(200).json({
         success: true,
         post: post,
     });
 });
+//getTimeLine
+export const getTimeline = async (req, res) => {
+    const userId = req.userId;
+    const timelines = await TimeLine.find({
+      following: userId,
+    })
+      .populate("following")
+      .populate("post")
+      .lean();
+    res.status(200).send({
+      data: timelines,
+    });
+  };
 //delete post
 export const deletePost = asyncHandler(async(req, res, next) => {
     const post = await Post.findById(req.params.id);

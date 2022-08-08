@@ -33,10 +33,6 @@ const PostSchema = new Schema({
 },{ timestamps: true }
 );
 
-PostSchema.pre("remove",async function (next){
-    await this.model("Comment").deleteMany({comments: this._id})
-    next();
-});
 
 export const Post = mongoose.model("Post", PostSchema);
 export const Comment = mongoose.model("Comment", commentSchema);
