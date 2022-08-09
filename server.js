@@ -8,6 +8,7 @@ import postsRouter from './routes/post';
 import commentRouter from './routes/comment'; 
 import followRouter from './routes/follow.js';
 import colors from "colors";
+import cors from "cors";
 import { errorHandler } from './middleware/errorHandler.js';
 
 //tohirgoog duudah
@@ -17,6 +18,7 @@ connectDB();
 
 app.use(express.json());
 app.use(fileUpload());
+app.use(cors());
 app.use(express.static('./public/uploads'));
 app.use("/api/v1/users/",usersRouter);
 app.use("/api/v1/post/", postsRouter);
