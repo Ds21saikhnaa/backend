@@ -7,10 +7,11 @@ import path from "path";
 import { time } from "console";
 //getPost 
 export const getPosts = asyncHandler(async( req, res, next) => {
-    const post = await Post.find();
+    const post = await Post.find().populate("createUser").lean();
     res.status(200).json({
         success: true,
         count: post.length,
+        name: "hello",
         post: post,
     });
 });
