@@ -12,7 +12,19 @@ const commentSchema = new Schema(
         ref:"User",
         required: true
     }
-    },{ timestamps: true })
+    },{ timestamps: true });
+const likeSchema = new Schema(
+    {
+        like: {
+            type: Boolean
+        },
+        userId: {
+            type: mongoose.Schema.ObjectId,
+            ref:"User",
+            required: true
+        }   
+},{timestamps: true}
+)
 const PostSchema = new Schema({
     image: {
         type: [String],
@@ -28,6 +40,10 @@ const PostSchema = new Schema({
     },
     comments: {
         type:[commentSchema],
+        default: []
+    },
+    like: {
+        type: [likeSchema],
         default: []
     }
 },{ timestamps: true }

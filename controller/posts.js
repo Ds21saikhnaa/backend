@@ -4,11 +4,13 @@ import { Follow } from "../models/Follow";
 import { TimeLine } from "../models/TimeLine";
 import { MyError } from "../utils/myError.js";
 import path from "path";
+import { time } from "console";
 //getPost 
 export const getPosts = asyncHandler(async( req, res, next) => {
     const post = await Post.find();
     res.status(200).json({
         success: true,
+        count: post.length,
         post: post,
     });
 });
@@ -19,18 +21,19 @@ export const newPost = asyncHandler(async( req, res, next) => {
     const followers = await Follow.find({
         follower: userId,
       }).lean();
-      console.log(followers);
       followers.forEach(async (user) => {
-        console.log(user);
         TimeLine.create({
-          follower: user._id,
-          following: userId,
-          post: post._id,
+            follower: user._id,
+            following: userId,
+            post: post._id,
+        //   following: user._id,
+        //   follower: userId,
+        //   post: post._id,
         });
       });
     res.status(200).json({
         success: true,
-        post: post,
+       post: post
     });
 });
 //getTimeLine
@@ -42,10 +45,13 @@ export const getTimeline = async (req, res) => {
       .populate("following")
       .populate("post")
       .lean();
-    res.status(200).send({
-      data: timelines,
-    });
-  };
+
+      res.status(200).send({
+        success: true,
+        count: timelines.length,
+        data: timelines,
+      });
+    };
 //delete post
 export const deletePost = asyncHandler(async(req, res, next) => {
     const post = await Post.findById(req.params.id);
@@ -73,9 +79,8 @@ export const updatePost = asyncHandler(async(req,res,next) => {
         data: post
     })
 })
-//upload image
+//upload photo and video
 export const uploadPhoto = asyncHandler(async( req, res, next) => {
-    console.log(req.params.id)
     const post = await Post.findById(req.params.id);
 
     if(!post){
@@ -84,6 +89,7 @@ export const uploadPhoto = asyncHandler(async( req, res, next) => {
 
     const file = req.files.file
     if(!file.length){
+        const type = file.mimetype.split("/")[0];
         if(!file.mimetype.startsWith("image") && !file.mimetype.startsWith("video")){
             throw new MyError(`ta zurag upload hiine uu!`, 400);
         }
@@ -92,7 +98,7 @@ export const uploadPhoto = asyncHandler(async( req, res, next) => {
             throw new MyError(`tanii zuragni hemjee hetersen bn!`, 400);
         }
 
-        file.name = `file_${req.params.id}${path.parse(file.name).ext}`;
+        file.name = `${type}_${req.params.id}${path.parse(file.name).ext}`;
 
         await file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async(err) => {
             if(err){
@@ -103,7 +109,6 @@ export const uploadPhoto = asyncHandler(async( req, res, next) => {
         post.photoUrl = `http://localhost:8000/${file.name}`;
     }
     else{
-
             for (const property in file) {
                 const files = file[property];
             if(!files.mimetype.startsWith("image") && !files.mimetype.startsWith("video")){
@@ -114,8 +119,8 @@ export const uploadPhoto = asyncHandler(async( req, res, next) => {
                 throw new MyError(`tanii zuragni hemjee hetersen bn!`, 400);
             }
         
-            files.name = `file_${req.params.id}${property}${path.parse(files.name).ext}`;
-        
+            const type = files.mimetype.split("/")[0];
+            files.name = `${type}_${req.params.id}${property}${path.parse(files.name).ext}`;
             await files.mv(`${process.env.FILE_UPLOAD_PATH}/${files.name}`, async(err) => {
                 if(err){
                     throw new MyError(`file huulahad aldaa garlaa!`, 400);
