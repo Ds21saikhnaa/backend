@@ -11,7 +11,6 @@ export const getPosts = asyncHandler(async( req, res, next) => {
     res.status(200).json({
         success: true,
         count: post.length,
-        name: "hello",
         post: post,
     });
 });
