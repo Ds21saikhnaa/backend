@@ -36,6 +36,7 @@ export const userLogin = asyncHandler(async(req, res, next) => {
     });
 });
 
+//buh user-iig awah api
 export const getUsers = asyncHandler(async(req, res, next) => {
     const user = await User.find();
     // const token = user.getJsonWebToken();
@@ -45,6 +46,7 @@ export const getUsers = asyncHandler(async(req, res, next) => {
     });
 });
 
+//delete user account
 export const deleteUser = asyncHandler(async(req,res, next) => {
     const user =  await User.findById(req.params.id);
     if(!user){
@@ -54,4 +56,9 @@ export const deleteUser = asyncHandler(async(req,res, next) => {
     res.status(200).json({
         success: true
     })
-})
+});
+
+//user profile image hiine
+export const proImageUpload = () => {
+    
+} 

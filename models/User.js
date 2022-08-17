@@ -24,7 +24,7 @@ const UserSchema = new Schema({
     gender: String,
     photo :{
         type: String,
-        default: "no-photo.jpg",
+        default: "https://secure.gravatar.com/avatar/4b21ce3917fcb75324268ba4d3143c37?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Fdefault-avatar-0.png",
     },
     location: String,
     bio: String,

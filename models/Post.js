@@ -26,10 +26,9 @@ const likeSchema = new Schema(
 },{timestamps: true}
 )
 const PostSchema = new Schema({
-    image: {
-        type: [String],
+    file: {
+        type: [Object],
     },
-    photoUrl: [String],
     description: {
         type: String
     },
