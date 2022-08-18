@@ -17,12 +17,20 @@ export const protect = asyncHandler(async(req, res, next) => {
     // req.userRole = tokenObj.role;
     next();
 });
-
-export const authorize = (userId) => {
-    return(req, res, next) => {
-        if(!userId === req._id){
-            throw new MyError(`Tanii erh ene uildlig hiihed hureltsehgui!`, 403);
-        }
-        next();
+export const authorize = (createUser, nowUser) => {
+    if (createUser != nowUser) {
+        return false
+        //throw new MyError(`Tanii erh ene uildlig hiihed hureltsehgui!`, 403);
+    }else{
+        return true
     }
 }
+// export const authorize = (createUser) => {
+//     return(req, res, next) => {
+//         if(!createUser === req.userId){
+//             throw new MyError(`Tanii erh ene uildlig hiihed hureltsehgui!`, 403);
+//         }
+//         //return true
+//         next();
+//     }
+// }

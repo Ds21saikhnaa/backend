@@ -5,6 +5,7 @@ import { TimeLine } from "../models/TimeLine";
 import { MyError } from "../utils/myError.js";
 import path from "path";
 import { time } from "console";
+import { authorize } from "../middleware/protect";
 //getPost 
 export const getPosts = asyncHandler(async( req, res, next) => {
     const post = await Post.find().populate("createUser").lean();
@@ -15,6 +16,15 @@ export const getPosts = asyncHandler(async( req, res, next) => {
         post: post,
     });
 });
+
+//get user post
+export const getUserPosts = asyncHandler(async(req, res, next) => {
+    const post = await Post.find({"createUser":req.params.id}).populate("createUser").lean();
+    res.status(200).json({
+        success: true,
+        post
+    })
+})
 //new post
 export const newPost = asyncHandler(async( req, res, next) => {
     const userId = req.userId;
@@ -59,6 +69,11 @@ export const deletePost = asyncHandler(async(req, res, next) => {
     if(!post){
         throw new MyError("iim post bhgui bn!", 404);
     }
+    let create = post.createUser.toString();
+    let flag = authorize(create, req.userId);
+    if (!flag) {
+        throw new MyError("ene uildeliig hiihed tanii erh hurehgui!", 404);
+    }
     post.remove();
     res.status(200).json({
         success: true
@@ -70,6 +85,11 @@ export const updatePost = asyncHandler(async(req,res,next) => {
     const post = await Post.findById(req.params.id);
     if(!post){
         throw new MyError("iim post bhgui bn!", 404);
+    }
+    let create = post.createUser.toString();
+    let flag = authorize(create, req.userId);
+    if (!flag) {
+        throw new MyError("ene uildeliig hiihed tanii erh hurehgui!", 404);
     }
     for(let attr in req.body){
         post[attr] = req.body[attr];
@@ -88,7 +108,6 @@ export const uploadPhoto = asyncHandler(async( req, res, next) => {
         throw new MyError("iim post bhgui bn!", 404);
     }
     const file = req.files.file;
-    let arr = [];
     let obj = {};
     if(!file.length){
         const type = file.mimetype.split("/")[0];

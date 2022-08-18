@@ -15,7 +15,6 @@ import { errorHandler } from './middleware/errorHandler.js';
 const app = express();
 dotenv.config({path: './config/config.env'});
 connectDB();
-
 app.use(express.json());
 app.use(fileUpload());
 app.use(cors());
